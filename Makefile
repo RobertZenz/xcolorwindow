@@ -9,6 +9,9 @@ all: $(MAIN)
 $(MAIN): src/$(MAIN).c
 	$(CC) $< $(CFLAGS) $(INCLUDES) $(LFLAGS) -o $@
 
+format:
+	astyle --indent=tab --indent-switches src/$(MAIN).c
+
 clean:
 	$(RM) $(MAIN)
 

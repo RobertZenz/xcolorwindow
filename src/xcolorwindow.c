@@ -1,3 +1,7 @@
+/*
+ * Licensed under Public Domain or CC0.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>

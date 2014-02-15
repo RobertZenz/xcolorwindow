@@ -7,7 +7,7 @@
 
 
 int main(int argc, char *argv[]) {
-	int color = 0x00FF00;
+	int color = 0x000000;
 	int height = 600;
 	char *title = "xcolorwindow";
 	int width = 800;

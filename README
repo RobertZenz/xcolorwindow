@@ -2,3 +2,28 @@ xcolorwindow
 ============
 
 A simple colored window.
+
+Options:
+
+    -c  Color
+    -h  Height
+    -t  Title
+    -w  Width
+    -x  X position
+    -y  Y position
+
+Some example usages:
+
+    xcolorwindow
+    Displays a black window.
+    
+    xcolorwindow -t "Window Title"
+    Displays a black window with the title "Window Title".
+    
+    xcolorwindow -x 128 -y 128 -w 128 -h 128
+    Displays a black window with the width and height of 128 and
+    with 128 pixels from the top and left.
+    
+    xcolorwindow -c 16711680
+    Displays a red window.    
+

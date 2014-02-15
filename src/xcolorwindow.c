@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 #include <X11/Xlib.h>
 
 #include "vroot.h"
@@ -6,6 +8,41 @@
 
 int main(int argc, char *argv[]) {
 	int color = 0x00FF00;
+	int height = 600;
+	char *title = "xcolorwindow";
+	int width = 800;
+	int x = 32;
+	int y = 32;
+	
+	int c;
+	while((c = getopt(argc, argv, "c:h:t:w:x:y:")) != -1) {
+		switch (c) {
+			case 'c':
+				color = atoi(optarg);
+				break;
+				
+			case 'h':
+				height = atoi(optarg);
+				break;
+			
+			case 't':
+				title = strdup(optarg);
+				break;
+				
+			case 'w':
+				width = atoi(optarg);
+				break;
+				
+			case 'x':
+				x = atoi(optarg);
+				break;
+				
+			case 'y':
+				y = atoi(optarg);
+				break;
+				
+		}
+	}
 
 	Display *display = XOpenDisplay(getenv("DISPLAY"));
 	int screen = DefaultScreen(display);
@@ -13,9 +50,10 @@ int main(int argc, char *argv[]) {
 	Window window = XCreateSimpleWindow(
 		display, 
 		RootWindow(display, screen),
-		24,	48,
-		800, 640,
+		x, y,
+		width, height,
 		1, BlackPixel(display, screen), WhitePixel(display, screen));
+	XStoreName(display, window, title);
 	XMapWindow(display, window);
 	
 	// Fetch the initial set of window attributes.
@@ -33,6 +71,15 @@ int main(int argc, char *argv[]) {
 
 	XEvent event;
 
+	// Initial drawing.
+	XSetBackground(display, graphics, color);
+	XSetForeground(display, graphics, color);
+	XFillRectangle(
+		display, window, graphics,
+		0, 0,
+		attributes.width, attributes.height);
+	XFlush(display);
+
 	int running = 1;
 	while(running) {
 		XNextEvent(display, &event);
@@ -48,6 +95,7 @@ int main(int argc, char *argv[]) {
 			case Expose:
 			case GraphicsExpose:
 			case NoExpose:
+				XGetWindowAttributes(display, window, &attributes);
 				XSetBackground(display, graphics, color);
 				XSetForeground(display, graphics, color);
 				XFillRectangle(
@@ -56,10 +104,6 @@ int main(int argc, char *argv[]) {
 					attributes.width, attributes.height);
 				XFlush(display);
 				break;
-
-			case ResizeRequest:
-				XGetWindowAttributes(display, window, &attributes);
-				break;				
 		}
 	}
 	
